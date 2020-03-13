@@ -5,7 +5,6 @@ import 'BaseFunction.dart';
 import 'NavigatorManger.dart';
 
 /// 基类
-/// @author puppet
 abstract class BaseWidget extends StatefulWidget {
 
   BaseWidget({Key key}) : super(key: key);

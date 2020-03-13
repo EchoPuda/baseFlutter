@@ -2,7 +2,7 @@
 import 'package:event_bus/event_bus.dart';
 
 /// 监听器
-/// @author puppet
+/// @author jm
 class TestEventBus {
 
   static final TestEventBus _gInstance = TestEventBus._init();

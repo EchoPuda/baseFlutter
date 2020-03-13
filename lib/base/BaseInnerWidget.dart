@@ -4,7 +4,6 @@ import 'BaseFunction.dart';
 
 ///通常是和 viewpager 联合使用  ， 类似于Android 中的 fragment
 /// 不过生命周期 还需要在容器父类中根据tab切换来完善
-/// @author puppet
 abstract class BaseInnerWidget extends StatefulWidget {
   BaseInnerWidget({Key key}) : super(key: key);
 

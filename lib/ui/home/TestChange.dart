@@ -2,8 +2,8 @@ import 'package:baseflutter/base/common/commonInsert.dart';
 import 'package:baseflutter/utils/LanguageUtil.dart';
 import 'package:baseflutter/utils/bus/TestEventBus.dart';
 
-/// 
-/// @author puppet
+/// 测试页
+/// @author jm
 class TestChange extends BaseWidget {
   static const String TEST_CHANGE = "/test_change";
 

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:baseflutter/base/common/commonInsert.dart';
 
 /// 基本弹窗样式
-/// @author puppet
+/// @author jm
 class ShowMyDialog extends StatefulWidget {
 
   ShowMyDialog({Key key,

@@ -1,7 +1,7 @@
 import 'package:baseflutter/base/common/commonInsert.dart';
 
 /// 画出三角形
-/// @author puppet
+/// @author jm
 class TrianglePainter extends CustomPainter {
   bool isDown;
   Color color;

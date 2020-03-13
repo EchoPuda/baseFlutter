@@ -4,7 +4,7 @@ import 'package:baseflutter/base/common/commonInsert.dart';
 import 'package:flutter/services.dart';
 
 /// 语言管理器
-/// @author puppet
+/// @author jm
 class LanguageUtil {
 //  //本地的语言获取切换方法
 //  static String getText(String text) {

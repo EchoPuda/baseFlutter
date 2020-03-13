@@ -2,8 +2,6 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-///@author 0Rich
-
 ///预设图片选择工具，用于判断当前平台和当前手机屏幕密度获取适应的图片资源
 class LocalImageSelector {
   static double dpi = MediaQueryData.fromWindow(window).devicePixelRatio; //屏幕密度

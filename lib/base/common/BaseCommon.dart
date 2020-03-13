@@ -8,7 +8,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// 基础方法
-/// @author puppet
+/// @author jm
 class BaseCommon {
   ///图片导入头
   static const String ImagePath = "assets/images/";

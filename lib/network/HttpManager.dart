@@ -16,7 +16,7 @@ import 'MyIntercept.dart';
 import 'intercept/base_intercept.dart';
 
 /// http请求
-/// @author puppet
+/// @author jm
 class HttpManager {
   static const CONTENT_TYPE_JSON = "application/json";
   static const CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
@@ -402,7 +402,7 @@ class HttpManager {
 //      };
 //    };
 
-    /// 添加拦截器
+    /// 添加自己的拦截器
     _dio.interceptors.add(new MyIntercept());
   }
 

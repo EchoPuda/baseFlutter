@@ -1,7 +1,7 @@
 import 'package:baseflutter/base/common/commonInsert.dart';
 
 /// 底部弹出框
-/// @author puppet
+/// @author jm
 class CommonBottomSheet extends StatefulWidget {
   CommonBottomSheet({Key key, this.list, this.onItemClickListener})
       : assert(list != null),

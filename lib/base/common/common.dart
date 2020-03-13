@@ -1,6 +1,6 @@
 
 /// 常量
-/// @author puppet
+/// @author jm
 class Commons {
 
   /// 项目名

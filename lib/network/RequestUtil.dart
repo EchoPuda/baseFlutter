@@ -8,7 +8,7 @@ import 'intercept/base_intercept.dart';
 import 'model/test_model_entity.dart';
 
 /// 请求管理
-/// @author puppet
+/// @author jm
 class RequestUtil {
 
   /// 示例

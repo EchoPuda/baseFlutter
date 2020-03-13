@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:baseflutter/base/common/commonInsert.dart';
 
 /// 文本输入弹窗
-/// @author puppet
+/// @author jm
 class ShowEditDialog extends StatefulWidget {
 
   ShowEditDialog({Key key,

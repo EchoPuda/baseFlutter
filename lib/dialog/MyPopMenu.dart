@@ -2,7 +2,7 @@ import 'package:baseflutter/base/common/commonInsert.dart';
 import 'package:baseflutter/utils/paint/TrianglePainter.dart';
 
 /// pop菜单
-/// @author puppet
+/// @author jm
 abstract class MenuItemProvider {
   String get menuTitle;
   Widget get menuImage;

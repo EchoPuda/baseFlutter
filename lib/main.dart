@@ -11,6 +11,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:baseflutter/base/common/commonInsert.dart';
 
+/// @author jm
 void main() => realRunApp();
 
 void realRunApp() async {

@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// 数据存取
 class LocalStorage {
 
   static SharedPreferences preferences;
