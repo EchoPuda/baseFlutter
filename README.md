@@ -26,7 +26,7 @@ base flutter to design
   --ui -- 页面与组件  
   --utils -- 工具与管理器  
   
-assets目录下可分为     
+*assets*目录下可分为     
   --images     
   ----android     
   ------hdpi    
