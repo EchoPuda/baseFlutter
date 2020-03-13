@@ -1,0 +1,18 @@
+{
+  "yes" : {
+    "eg" : "yes",
+    "zh" : "是"
+  },
+  "change" : {
+    "eg" : "change",
+    "zh" : "切换"
+  },
+  "test" : {
+    "eg" : "test",
+    "zh" : "测试"
+  },
+  "click to next picture" : {
+    "eg" : "click to next picture",
+    "zh" : "点击跳转下一个页面"
+  }
+}
