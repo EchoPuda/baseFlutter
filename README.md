@@ -159,7 +159,7 @@ setIndex需设置为第X个页面
 ## 7.model   
 model的构建需用一个插件：**FlutterJsonBeanFactory**
 
-在model下直接通过该插件通过请求所得的json new一个model即可。    
+通过请求所得的json，在model下，根据json直接通过该插件 new一个model即可。    
 创建的model在对应的请求接口上声明 *PublishSubject<**XXXModelEntity**>*  
 即在listener中直接使用。  
 
