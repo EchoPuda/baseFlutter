@@ -8,15 +8,15 @@ base flutter to design
 
 ## Getting Started
 
-这个不是plugin插件。主要做参考，可自己移植，并导入或修改相关包。  
+这个不是plugin插件。主要做参考，可自己移植，并导入或修改相关包。     
 
-# 移植所需要的文件
+# 移植所需要的文件   
 【1】*lib*下的所有文件覆盖到自己的项目下  
 【2】*assets*下的目录结构，*language.json*为语言转换文件  
 【3】*pubspec.yaml*的dependencies（有需要可自己调整版本）  
 【4】android与iOS的相关权限等配置需自己添加  
 
-## 页面结构
+## 页面结构    
 *lib*目录下分为：
   --base -- 基类  
   --dialog -- 弹窗  
@@ -38,7 +38,7 @@ assets目录下可分为
    language.json
     
 
-## 1.在main中进行各资源第三方的初始化
+## 1.在main中进行各资源第三方的初始化   
 例：
 ```dart
 void realRunApp() async {
@@ -53,7 +53,7 @@ void realRunApp() async {
 ```
   MyApp中可以做一些全局的设置管理，如默认字体样式
   
-## 2.普通页面构建
+## 2.普通页面构建   
 【1】继承（extends） 使用 *BaseWidget* 代替 StatefulWidget ，*BaseWidgetState* 代替BaseWidgetState；
 但是 组件（Widget） 依旧是用StatefulWidget，要分清楚页面与组件的区别。
 
@@ -86,13 +86,13 @@ void realRunApp() async {
   ```
   
   也可手动调用loading展示
-  ```
+  ```dart
   setLoadingWidgetVisible(true);
   ```
   
   具体可以查看BaseFunction，均有注释。
   
-## 导航页的构建  
+## 3.导航页的构建    
 新建一个继承BaseWidget的“底”，使用*BaseTabBarWidget*作为导航栏。  
 例：
 ```dart
@@ -138,35 +138,35 @@ setIndex需设置为第X个页面
   int setIndex() => 0;
 ```
 
-**需注意的是**，
+**需注意的是**，   
   作为“底”的Lead，要在onCreate中设置状态栏和标题栏不显示（除非需要导航的所有页面都有同样的标题栏）  
   在页面中需要状态栏和标题栏的在onCreate设置显示，默认为不显示。  
   
-## 基本方法封装
+## 4.基本方法封装     
 **BaseCommon**是常用方法的封装  
 包括 页面导航方法，网络图片 等， 常用的方法在该类进行复用。  
 
-## 常量
+## 5.常量   
 **Commons**常量需要专门管理
 
-## 网络封装
+## 6.网络封装  
 网络的相关配置在**HttpManager**中进行配置  
 如何使用参考 *Address* 和 *RequestUtil* 中的写法。  
 
 基础拦截器如 *BaseIntercept* ,可在其中进行拦截处理，比如请求前添加**token**
 可增加额外的拦截器比如*ShowLoadingIntercept*, 并**继承** *BaseIntercept*
 
-## model
+## 7.model   
 model的构建需用一个插件：**FlutterJsonBeanFactory**
 
 在model下直接通过该插件通过请求所得的json new一个model即可。    
 创建的model在对应的请求接口上声明 *PublishSubject<**XXXModelEntity**>*  
 即在listener中直接使用。  
 
-## res
+## 8.res   
 颜色，样式，字符等的相关管理。
 
-## 多语言
+## 9.多语言   
 **LanguageUtil**为多语言管理器，通过读取assets中的json文件，得到相对应语言的翻译。  
 在*runApp*前进行读取
 ```dart
@@ -190,7 +190,7 @@ model的构建需用一个插件：**FlutterJsonBeanFactory**
 ```
 
 Language.json写法：
-```json
+```java
 {
   "test" : {
     "eg" : "test",
@@ -203,7 +203,7 @@ Language.json写法：
 }
 ```
 
-## 图片使用
+## 10.图片使用   
 【1】本地图片, 返回Widget:
 ```dart
 LocalImageSelecter.getImage("image")
@@ -218,7 +218,7 @@ getImage("image");
 BaseCommon.netImage("",20,20)
 ```
 
-## 本地存取 LocalStorage
+## 11.本地存取 LocalStorage   
 在*runApp*前可将异步转为同步
 ```dart
   //将LocalStorage 异步转为同步
@@ -234,7 +234,7 @@ LocalStorage.save();
 LocalStorage.get();
 ```
 
-## 距离转换（适配）, 谨慎使用！
+## 12.距离转换（适配）, 谨慎使用！   
 *ScreenAdapter*
 根据设计图与实际屏幕的宽度（高度）计算得到相应比例的距离，  
 但必须**谨慎使用**
@@ -260,7 +260,7 @@ LocalStorage.get();
 即，就单位来说，系统已经是有自己的适配，不需要我们画蛇添足给他们换算。  
 仅有页面设计的布局拥挤且不可滚动，需要计算每一个控件的分步区域的少数特殊情况下，才需要用这个来计算。
 
-# EventBus 事件处理
+# 13.EventBus 事件处理   
 很有用的工具。  
 当一个页面上的处理需要通知到另一个可见或不可见的页面进行处理时，就可利用这个工具进行通知。
 例：同一级导航中，当我在 商场 消费了金币，需要同时保证 钱包 中的显示金额同步变化，但仅是切换导航（或者说返回页面）并不能调用接口更新，  
