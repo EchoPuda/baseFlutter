@@ -93,7 +93,7 @@ void realRunApp() async {
   具体可以查看BaseFunction，均有注释。
   
 ## 3.导航页的构建    
-新建一个继承BaseWidget的“底”，使用*BaseTabBarWidget*作为导航栏。  
+新建一个继承BaseWidget的“底”，使用***BaseTabBarWidget***作为导航栏。  
 例：
 ```dart
   @override
@@ -131,7 +131,7 @@ void realRunApp() async {
     );
   }
 ```
-其中 Home Mine 页面继承 *BaseInnerWidget*  
+其中 Home Mine 页面继承 ***BaseInnerWidget***
 setIndex需设置为第X个页面  
 ```dart
   @override
@@ -139,8 +139,8 @@ setIndex需设置为第X个页面
 ```
 
 **需注意的是**，   
-  作为“底”的Lead，要在onCreate中设置状态栏和标题栏不显示（除非需要导航的所有页面都有同样的标题栏）  
-  在页面中需要状态栏和标题栏的在onCreate设置显示，默认为不显示。  
+  作为“底”的**Lead**，要在onCreate中设置**状态栏**和**标题栏**不显示（除非需要导航的所有页面都有同样的标题栏）;  
+  在页面(**BaseInnerWidget**)中需要状态栏和标题栏的在onCreate设置显示，默认为不显示。  
   
 ## 4.基本方法封装     
 **BaseCommon**是常用方法的封装  
