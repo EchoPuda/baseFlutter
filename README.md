@@ -28,14 +28,14 @@ base flutter to design
   
 assets目录下可分为     
   --images     
-    --android     
-      --hdpi    
-      --mdpi    
-      --xhdpi    
-      --xxhdpi    
-      --xxxhdpi    
-    --ios    
-   language.json    
+  ----android     
+  ------hdpi    
+  ------mdpi    
+  ------xhdpi    
+  ------xxhdpi    
+  ------xxxhdpi    
+  ----ios    
+  --language.json    
     
 
 ## 1.在main中进行各资源第三方的初始化   
