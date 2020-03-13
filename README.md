@@ -46,7 +46,7 @@ void realRunApp() async {
   //将LocalStorage 异步转为同步
   bool success = await LocalStorage.getInstance();
   assert(success);
-  //加载语音库
+  //加载语言库
   await LanguageUtil.loadLanguage();
   runApp(MyApp());
 }
