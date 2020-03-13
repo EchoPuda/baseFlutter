@@ -42,7 +42,7 @@ class HttpManager {
         bool isCancelable = true,
       }) {
     return _requstHttp<T>(
-        url, true, queryParameters, baseIntercept, isCancelable);
+        url, true, queryParameters, baseIntercept, isCancelable,false);
   }
 
   //post请求
@@ -52,6 +52,18 @@ class HttpManager {
         bool isCancelable = true,
         bool isSHowErrorToast = true}) {
     return _requstHttp<T>(url, false, FormData.fromMap(queryParameters),
+        baseIntercept, isCancelable,isSHowErrorToast);
+  }
+
+  //上传（post）请求
+  PublishSubject<T> upload<T>(String url, String path,
+      {String type : "image",
+        Map<String, dynamic> queryParameters,
+        BaseIntercept baseIntercept,
+        bool isCancelable = true,
+        bool isSHowErrorToast = true}) {
+    return _requestUpload<T>(url, path,type,
+        false, queryParameters,
         baseIntercept, isCancelable);
   }
 
@@ -65,7 +77,9 @@ class HttpManager {
       [bool isGet,
         queryParameters,
         BaseIntercept baseIntercept,
-        bool isCancelable]) {
+        bool isCancelable,
+        bool isShowErrorToast
+      ]) {
     Future future;
     PublishSubject<T> publishSubject = PublishSubject<T>();
     CancelToken cancelToken;
@@ -97,6 +111,7 @@ class HttpManager {
         publishSubject,
         MyError(500, errorMessage),
         baseIntercept,
+        isShowErrorToast: isShowErrorToast,
       );
     }
 
@@ -114,19 +129,18 @@ class HttpManager {
         }
       }
 
-      //这里要做错误处理
-      //需要先过滤 error ， 根据和后台的 约定 ， 搞清楚什么是失败
-      // 什么是成功  ， 这里只是根据了干货集中营的 返回 模拟了一下
+      //这里要做错误处理, 与后台约定好code，message等参数
+      int code = json.decode(data.toString())["code"];
 
-      bool isError = json.decode(data.toString())["error"];
-
-      print("---responseData----${data}-----");
-      if (isError) {
-
+//      print("---responseData----${data}-----");
+      if (code != 200) {
+        String message = json.decode(data.toString())["message"];
+        print("错误信息：" + message);
         callError(
           publishSubject,
-          MyError(10, "请求失败~"),
+          MyError(code, message),
           baseIntercept,
+          isShowErrorToast: isShowErrorToast,
         );
       } else {
         //这里的解析 请参照 https://www.jianshu.com/p/e909f3f936d6 , dart的字符串 解析蛋碎一地
@@ -137,7 +151,11 @@ class HttpManager {
         cancelLoading(baseIntercept);
       }
     }).catchError((err) {
-      callError(publishSubject, MyError(1, err.toString()), baseIntercept);
+      callError(
+        publishSubject,
+        MyError(1, err.toString()),
+        baseIntercept,
+        isShowErrorToast: isShowErrorToast,);
     });
 
     return publishSubject;
@@ -147,7 +165,8 @@ class HttpManager {
   PublishSubject<T> _requestUpload<T>(
       String url,
       String path,
-      [bool isGet,
+      [String type,
+        bool isGet,
         queryParameters,
         BaseIntercept baseIntercept,
         bool isCancelable]) {
@@ -228,11 +247,106 @@ class HttpManager {
     return publishSubject;
   }
 
+  ///上传请求,多个文件上传
+  PublishSubject<T> _requestUploads<T>(
+      String url,
+      List<String> paths,
+      [bool isGet,
+        queryParameters,
+        BaseIntercept baseIntercept,
+        bool isCancelable]) {
+    Future future;
+    PublishSubject<T> publishSubject = PublishSubject<T>();
+    CancelToken cancelToken;
+    _setInterceptOrcancelAble(baseIntercept, isCancelable, cancelToken);
+
+    List<MultipartFile> listPath = new List();
+    paths.forEach((path) {
+      var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+      var suffix = name.substring(name.lastIndexOf(".") + 1, name.length);
+
+      listPath.add(
+          MultipartFile.fromFileSync(
+            path,
+            filename: name,
+//        contentType: MediaType.parse("image/$suffix"),
+          )
+      );
+    });
+    FormData formData = new FormData.fromMap({
+      "filtType": "image",
+      "files":  listPath
+    });
+
+    try {
+      if (isGet) {
+        print("上传请使用post-------------");
+      } else {
+        future = _dio.post(url, data: formData, cancelToken: cancelToken);
+      }
+    } on DioError catch (e) {
+      String errorMessage = "";
+      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+        errorMessage = "与服务器连接超时";
+      } else {
+        errorMessage = "与服务器连接发生错误";
+      }
+
+      if (Commons.DEBUG) {
+        print('请求异常: ' + e.toString());
+        print('请求异常url: ' + url);
+        if (queryParameters != null) {
+          print('请求异常参数: ' + queryParameters.toString());
+        }
+      }
+      callError(
+        publishSubject,
+        MyError(500, errorMessage),
+        baseIntercept,
+      );
+    }
+
+    future.then((data){
+
+      if (Commons.DEBUG) {
+        print('请求url: ' + url);
+        print('请求token: ' + cancelToken.toString());
+        if (queryParameters != null) {
+          print('请求参数: ' + queryParameters.toString());
+        }
+        if (future != null) {
+          print('返回参数: ' + future.toString());
+        }
+      }
+
+      bool isError = json.decode(data.toString())["error"];
+      if (isError) {
+        callError(
+          publishSubject,
+          MyError(10, "请求失败~"),
+          baseIntercept,
+        );
+      } else {
+        publishSubject
+            .add(JsonConvert.fromJsonAsT<T>(json.decode(data.toString())));
+        publishSubject.close();
+
+        cancelLoading(baseIntercept);
+      }
+    });
+
+    return publishSubject;
+  }
+
   ///请求错误以后 做的一些事情
   void callError(PublishSubject publishSubject, MyError error,
-      BaseIntercept baseIntercept) {
+      BaseIntercept baseIntercept,{bool isShowErrorToast : true}) {
     publishSubject.addError(error);
-    showErrorToast(error.message);
+
+    if (isShowErrorToast) {
+      showErrorToast(error.message);
+    }
+
     publishSubject.close();
     cancelLoading(baseIntercept);
     if (baseIntercept != null) {

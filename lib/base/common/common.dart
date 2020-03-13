@@ -5,12 +5,7 @@ class Commons {
 
   /// 项目名
   /// TODO 修改为你的项目名
-  static const String PROJECT_NAME = "base_flutter";
-
-  static String language = "eg";
-
-  ///默认倒计时60s
-  static const int VCODE_END_TIME = 60;
+  static const String PROJECT_NAME = "baseFlutter";
 
   ///用户信息
   static const TOKEN = "token";

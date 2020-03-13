@@ -1,24 +1,46 @@
 import 'package:baseflutter/base/common/commonInsert.dart';
 import 'package:baseflutter/utils/LanguageUtil.dart';
+import 'package:baseflutter/utils/bus/TestEventBus.dart';
 
 /// 
 /// @author puppet
-class TestChange extends BaseWidgetPage {
+class TestChange extends BaseWidget {
   static const String TEST_CHANGE = "/test_change";
 
   @override
-  BaseWidgetPageState<BaseWidgetPage> getState() => new TestChangeState();
+  BaseWidgetState<BaseWidget> getState() => new TestChangeState();
 
 }
 
-class TestChangeState extends BaseWidgetPageState {
+class TestChangeState extends BaseWidgetState {
   @override
   Widget buildWidget(BuildContext context) {
     return Container(
       child: Center(
-        child: Text(
-          LanguageUtil.getText(MyStrings.yes),
-        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              getText("yes"),
+            ),
+            SizedBox(height: 20,),
+            GestureDetector(
+              onTap: () {
+                /// 发送后所有添加了该监听的监听器都会收到
+                TestEventBus().bus.fire(RefreshEvent(data: "切换"));
+                setState(() {
+                });
+              },
+              child: Text(
+                getText("notify previous page to switch language"),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: MyColors.text_font_red
+                ),
+              ),
+            ),
+          ],
+        )
       ),
     );
   }

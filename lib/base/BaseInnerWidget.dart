@@ -1,6 +1,6 @@
 import 'package:baseflutter/base/common/commonInsert.dart';
 import 'package:flutter/services.dart';
-import 'CommonFunction.dart';
+import 'BaseFunction.dart';
 
 ///通常是和 viewpager 联合使用  ， 类似于Android 中的 fragment
 /// 不过生命周期 还需要在容器父类中根据tab切换来完善
@@ -26,7 +26,7 @@ abstract class BaseInnerWidget extends StatefulWidget {
 }
 
 abstract class BaseInnerWidgetState<T extends BaseInnerWidget> extends State<T>
-    with AutomaticKeepAliveClientMixin, BaseFuntion {
+    with AutomaticKeepAliveClientMixin, BaseFunction {
   @override
   void initState() {
     initBaseCommon(this, context);

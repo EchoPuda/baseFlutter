@@ -20,6 +20,6 @@ export 'package:baseflutter/network/HttpManager.dart';
 
 export 'package:flutter_easyrefresh/easy_refresh.dart';
 
-export 'package:baseflutter/base/BaseWidgetPage.dart';
+export 'package:baseflutter/base/BaseWidget.dart';
 
 export 'package:baseflutter/base/BaseInnerWidget.dart';

@@ -24,7 +24,7 @@ class LanguageUtil {
       if (language.containsKey(text)) {
         return language[text][_delWithLanguage(currentLanguage)];
       }
-      return "";
+      return text;
     }
 
     static Future loadLanguage() async {
@@ -41,22 +41,19 @@ class LanguageUtil {
       });
     }
 
+    /// 修改后需调用setState才能更新当前页面语言
+    static void changeLanguage(SwitchLanguage language) {
+      currentLanguage = language;
+    }
+
     static String _delWithLanguage(SwitchLanguage lan) {
-      switch (lan) {
-        case SwitchLanguage.eg:
-          return "eg";
-          break;
-        case SwitchLanguage.zh:
-          return "zh";
-          break;
-        default:
-          return "zh";
-          break;
-      }
+      String sLan = lan.toString();
+      return sLan.split(".")[1];
     }
 
 }
 
+/// 语言开关，加一下自己需要的语言
 enum SwitchLanguage {
   eg,zh
 }

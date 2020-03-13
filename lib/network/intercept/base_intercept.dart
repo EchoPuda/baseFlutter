@@ -1,5 +1,5 @@
 
-import 'package:baseflutter/base/CommonFunction.dart';
+import 'package:baseflutter/base/BaseFunction.dart';
 import 'package:oktoast/oktoast.dart';
 
 ///
@@ -7,7 +7,7 @@ import 'package:oktoast/oktoast.dart';
 ///BaseWidget 中的父类 BaseFuntion 即可
 ///
 abstract class BaseIntercept {
-  BaseFuntion baseFuntion;
+  BaseFunction baseFuntion;
   bool isDefaultFailure = true;
 
   void beforeRequest();

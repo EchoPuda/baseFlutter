@@ -1,34 +1,34 @@
 import 'package:baseflutter/base/common/commonInsert.dart';
 import 'package:flutter/services.dart';
 
-import 'CommonFunction.dart';
+import 'BaseFunction.dart';
 import 'NavigatorManger.dart';
 
 /// 基类
 /// @author puppet
-abstract class BaseWidgetPage extends StatefulWidget {
+abstract class BaseWidget extends StatefulWidget {
 
-  BaseWidgetPage({Key key}) : super(key: key);
+  BaseWidget({Key key}) : super(key: key);
 
-  BaseWidgetPageState baseWidgetState;
+  BaseWidgetState baseWidgetState;
   @override
-  BaseWidgetPageState createState() {
+  BaseWidgetState createState() {
     baseWidgetState = getState();
     return baseWidgetState;
   }
 
-  BaseWidgetPageState getState();
+  BaseWidgetState getState();
   String getStateName() {
     return baseWidgetState.getClassName();
   }
 }
 
-abstract class BaseWidgetPageState<T extends BaseWidgetPage> extends State<T>
-    with WidgetsBindingObserver, BaseFuntion {
+abstract class BaseWidgetState<T extends BaseWidget> extends State<T>
+    with WidgetsBindingObserver, BaseFunction {
   //平台信息
 //  bool isAndroid = Platform.isAndroid;
 
-  BaseFuntion getBaseFunction() {
+  BaseFunction getBaseFunction() {
     return this;
   }
 

@@ -1,6 +1,10 @@
+import 'package:baseflutter/network/RequestUtil.dart';
+import 'package:baseflutter/network/intercept/showloading_intercept.dart';
+import 'package:baseflutter/ui/Lead.dart';
 import 'package:baseflutter/ui/home/TestChange.dart';
 import 'package:baseflutter/utils/LanguageUtil.dart';
 import 'package:baseflutter/utils/LocalImageSelecter.dart';
+import 'package:baseflutter/utils/bus/TestEventBus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -20,7 +24,7 @@ void realRunApp() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  // This ui.Mine.widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor:Colors.transparent);
@@ -69,30 +73,42 @@ class MainState extends State<Main>  {
   }
 }
 
-class HomePage extends BaseWidgetPage {
+class HomePage extends BaseWidget {
 
   @override
-  BaseWidgetPageState<BaseWidgetPage> getState() => HomePageState();
+  BaseWidgetState<BaseWidget> getState() => HomePageState();
 
 }
 
-class HomePageState extends BaseWidgetPageState {
+class HomePageState extends BaseWidgetState<HomePage> {
 
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   /// 改語言
   Future<void> _changeLanguage() async {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       if (LanguageUtil.currentLanguage == SwitchLanguage.eg) {
-        LanguageUtil.currentLanguage = SwitchLanguage.zh;
+        LanguageUtil.changeLanguage(SwitchLanguage.zh);
       } else {
-        LanguageUtil.currentLanguage = SwitchLanguage.eg;
+        LanguageUtil.changeLanguage(SwitchLanguage.eg);
       }
     });
   }
 
   Future<void> _onPressed() async {
     await _changeLanguage();
+  }
+
+  Future _requestTest() async {
+    setLoadingWidgetVisible(true);
+    RequestUtil.testRequest(ShowLoadingIntercept(this), "data").listen((event) {
+
+    }).onError((e) {
+      log(e.messgae);
+    });
   }
 
   @override
@@ -120,6 +136,19 @@ class HomePageState extends BaseWidgetPageState {
                   },
                   child: Text(
                     LanguageUtil.getText("click to next picture"),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: MyColors.blue,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30,),
+                GestureDetector(
+                  onTap: () {
+                    BaseCommon.openPage(context, Lead());
+                  },
+                  child: Text(
+                    LanguageUtil.getText("go to Lead"),
                     style: TextStyle(
                       fontSize: 15,
                       color: MyColors.blue,
@@ -215,9 +244,15 @@ class HomePageState extends BaseWidgetPageState {
 
   @override
   void onCreate() {
+    setTopBarVisible(true);
     setAppBarVisible(true);
     setAppBarTitle("Home");
-    setTopBarVisible(true);
+
+    /// 监听
+    TestEventBus().bus.on<RefreshEvent>().listen((event) {
+      log(event.data);
+      _changeLanguage();
+    });
   }
 
   @override

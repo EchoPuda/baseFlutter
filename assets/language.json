@@ -14,5 +14,13 @@
   "click to next picture" : {
     "eg" : "click to next picture",
     "zh" : "点击跳转下一个页面"
+  },
+  "go to Lead" : {
+    "eg" : "go to Lead",
+    "zh" : "去导航页"
+  },
+  "notify previous page to switch language" : {
+    "eg" : "notify previous page to switch language",
+    "zh" : "通知上一个页面切换语言"
   }
 }

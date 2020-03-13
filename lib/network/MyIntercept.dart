@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+/// 拦截器，可自定义
 class MyIntercept extends Interceptor {
   var model = "1.0";
 
@@ -11,7 +12,6 @@ class MyIntercept extends Interceptor {
   onRequest(RequestOptions options) {
     // TODO: implement onRequest
     print("-----请求之前，需要加一个请求头中的token--");
-
 //
 //    .addHeader("filter-key", "filter-header")
 //        .addHeader("xloanDeviceID", deviceID)
@@ -24,6 +24,7 @@ class MyIntercept extends Interceptor {
 //        .addHeader("xloanServer", "1.0")
 //        .build();
 
+    //根据实际项目修改
     options.headers.addAll({
       "xloanDeviceID": "deviceID",
       "xloanPlatform": "ANDROID",

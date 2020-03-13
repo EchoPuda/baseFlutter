@@ -1,11 +1,10 @@
-import 'package:baseflutter/base/common/BaseCommon.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
 import 'dimens.dart';
 
+/// 样式
 class TextStyles {
 
   static TextStyle titleRightStyle = TextStyle(

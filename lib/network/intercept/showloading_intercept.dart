@@ -1,10 +1,10 @@
-import 'package:baseflutter/base/CommonFunction.dart';
+import 'package:baseflutter/base/BaseFunction.dart';
 import 'base_intercept.dart';
 
 class ShowLoadingIntercept extends BaseIntercept {
-  ShowLoadingIntercept(BaseFuntion baseFuntion,
+  ShowLoadingIntercept(BaseFunction baseFunction,
       {bool isDefaultFailure = true}) {
-    this.baseFuntion = baseFuntion;
+    this.baseFuntion = baseFunction;
     this.isDefaultFailure = isDefaultFailure;
   }
   @override

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:baseflutter/utils/LanguageUtil.dart';
 import 'package:baseflutter/utils/LocalImageSelecter.dart';
 import 'package:baseflutter/utils/ScreanAdapter.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +10,7 @@ import 'buildConfig.dart';
 
 /// base 类 常用的一些工具类 ， 放在这里就可以了
 /// get方法均可以重写，set方法可直接调用设置
-abstract class BaseFuntion {
+abstract class BaseFunction {
   State _stateBaseFunction;
   BuildContext _contextBaseFunction;
 
@@ -391,7 +394,8 @@ abstract class BaseFuntion {
 
   ///关闭最后一个 flutter 页面 ， 如果是原生跳过来的则回到原生，否则关闭app
   void finishDartPageOrApp() {
-    SystemNavigator.pop();
+//    SystemNavigator.pop();
+    exit(0);
   }
 
   ///设置状态栏隐藏或者显示
@@ -581,9 +585,7 @@ abstract class BaseFuntion {
   }
 
   ///初始化一些变量 相当于 onCreate ， 放一下 初始化数据操作
-  void onCreate() {
-    log("create");
-  }
+  void onCreate();
 
   ///相当于onResume, 只要页面来到栈顶， 都会调用此方法，网络请求可以放在这个方法
   void onResume();
@@ -648,6 +650,11 @@ abstract class BaseFuntion {
       imageColor: imageColor,
       key: key,
     );
+  }
+
+  /// 获取当前语言的内容
+  String getText(String text) {
+    return LanguageUtil.getText(text);
   }
 
   /// 输入日志

@@ -40,6 +40,8 @@ dependencies:
   dio: ^3.0.9
   # 网图缓存
   cached_network_image: ^2.0.0
+  # loading 图标
+  loading_indicator: ^1.1.0
 
   # 下拉刷新，上拉加载
   flutter_easyrefresh: ^2.1.0

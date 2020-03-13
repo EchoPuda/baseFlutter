@@ -1,7 +1,7 @@
+import 'BaseWidget.dart';
 
-import 'BaseWidgetPage.dart';
-
-///这个管理类，只是标记 当前 按照顺序放入和移除栈名称，并不是页面跳转后退 的功能， 只是方便 推算、表示生命周期方法
+/// 这个管理类，只是标记 当前 按照顺序放入和移除栈名称，并不是页面跳转后退 的功能，
+/// 只是方便 推算、表示生命周期方法，一般不需要修改
 class NavigatorManger {
   List<String> _activityStack = new List<String>();
 
@@ -11,15 +11,15 @@ class NavigatorManger {
 
   //工厂模式
   factory NavigatorManger() => _singleton;
-  void addWidget(BaseWidgetPageState widgetName) {
+  void addWidget(BaseWidgetState widgetName) {
     _activityStack.add(widgetName.getClassName());
   }
 
-  void removeWidget(BaseWidgetPageState widgetName) {
+  void removeWidget(BaseWidgetState widgetName) {
     _activityStack.remove(widgetName.getClassName());
   }
 
-  bool isTopPage(BaseWidgetPageState widgetName) {
+  bool isTopPage(BaseWidgetState widgetName) {
     if (_activityStack == null) {
       return false;
     }
@@ -31,7 +31,7 @@ class NavigatorManger {
     }
   }
 
-  bool isSecondTop(BaseWidgetPageState widgetName) {
+  bool isSecondTop(BaseWidgetState widgetName) {
     if (_activityStack == null) {
       return false;
     }

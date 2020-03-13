@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// 底部或顶部的导航栏
 class BaseTabBarWidget extends StatefulWidget {
   static const int BOTTOM_TAB = 1;
 

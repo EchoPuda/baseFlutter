@@ -1,9 +1,9 @@
 
-import 'package:baseflutter/base/CommonFunction.dart';
+import 'package:baseflutter/base/BaseFunction.dart';
 import 'base_intercept.dart';
 
 class NoActionIntercept extends BaseIntercept {
-  NoActionIntercept(BaseFuntion baseFuntion, {bool isDefaultFailure = true}) {
+  NoActionIntercept(BaseFunction baseFuntion, {bool isDefaultFailure = true}) {
     this.baseFuntion = baseFuntion;
     this.isDefaultFailure = isDefaultFailure;
   }

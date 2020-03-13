@@ -4,9 +4,10 @@ import 'dart:io';
 import 'package:baseflutter/utils/LocalImageSelecter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:path_provider/path_provider.dart';
 
-/// 基础常量
+/// 基础方法
 /// @author puppet
 class BaseCommon {
   ///图片导入头
@@ -33,7 +34,7 @@ class BaseCommon {
   }
 
   ///打开新页面代替旧页面(用页名)
-  static openPageReplacementWithName(BuildContext context, String widget) {
+  static openPageReplacementWithName(BuildContext context, widget) {
     return Navigator.pushReplacementNamed(context, widget);
   }
 
@@ -43,6 +44,7 @@ class BaseCommon {
   }
 
   ///关闭所有页面(或直到某页面)并打开该页面
+  ///可以修改默认[route],比如到Main
   static closeAllAndOpenPage(BuildContext context, Widget widget,{String route}) {
     return Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => widget), route == null ? (route) => route == null : ModalRoute.withName(route));
   }
@@ -56,15 +58,13 @@ class BaseCommon {
   static Widget netImage(String headImg, double width, double height,) {
     // TODO error, loading 需修改
     return headImg.length > 7 && headImg.substring(0,7) == "http://" ? CachedNetworkImage(
-      placeholder: (context, url) => LocalImageSelector.getImage("jiazai", imageWidth: width * 0.7),
-      errorWidget: (context, url, error) => LocalImageSelector.getImage("tupianjiazaishibai_88", imageWidth: width * 0.7),
+      placeholder: (context, url) => SizedBox(width: width * 0.5,height: width * 0.5,child: LoadingIndicator(indicatorType: Indicator.ballSpinFadeLoader,color: Colors.grey,),),
+      errorWidget: (context, url, error) => Icon(Icons.error_outline),
       imageUrl: headImg,
       width: width,
       height: height,
     ) : LocalImageSelector.getImage("touxiang_60",imageWidth: width);
   }
-
-
 
   ///加载缓存
   static Future<double> loadCache() async {
