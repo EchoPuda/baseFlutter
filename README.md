@@ -17,7 +17,7 @@ base flutter to design
 【4】android与iOS的相关权限等配置需自己添加  
 
 ## 页面结构    
-*lib*目录下分为：
+*lib*目录下分为：     
   --base -- 基类  
   --dialog -- 弹窗  
   --generated -- 自动生成的model管理文件  
@@ -26,16 +26,16 @@ base flutter to design
   --ui -- 页面与组件  
   --utils -- 工具与管理器  
   
-assets目录下可分为
-  --images
-    --android
-      --hdpi
-      --mdpi
-      --xhdpi
-      --xxhdpi
-      --xxxhdpi
-    --ios
-   language.json
+assets目录下可分为     
+  --images     
+    --android     
+      --hdpi    
+      --mdpi    
+      --xhdpi    
+      --xxhdpi    
+      --xxxhdpi    
+    --ios    
+   language.json    
     
 
 ## 1.在main中进行各资源第三方的初始化   
@@ -214,7 +214,7 @@ getImage("image");
 具体可看LocalImageSelecter
 
 【2】网络图片，返回Widget:
-```
+```dart
 BaseCommon.netImage("",20,20)
 ```
 
@@ -242,7 +242,7 @@ LocalStorage.get();
 **禁止**直接用该工具直接做适配，一个页面的适配不是靠一个工具就能实现
 
 改工具适配原理(BaseFunction中也有强调)：
-```
+```dart
   ///   根据设计图中的总宽高和所需[width]，计算得出当前屏幕下的[width]。
   ///   但是，大多数情况下并不需要换算这个值！
   ///   系统默认距离单位是dp，简单来说就是会自动适配的单位，一般不同屏幕差距不大，不同于px。
@@ -305,8 +305,8 @@ class RefreshEvent {
 
 发送事件：
 ```dart
-    /// 发送后所有添加了该监听的监听器都会收到
-    TestEventBus().bus.fire(RefreshEvent(data: "数据"));
+  /// 发送后所有添加了该监听的监听器都会收到
+  TestEventBus().bus.fire(RefreshEvent(data: "数据"));
 ```
 
 fire可以指定事件给予不同的数据，在相同bus的监听上都会受到信息。
