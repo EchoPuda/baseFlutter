@@ -16,6 +16,8 @@ base flutter to design
 【3】*pubspec.yaml*的dependencies（有需要可自己调整版本）  
 【4】android与iOS的相关权限等配置需自己添加  
 
+移植并Packages get后，相应界面的import会报红，用ctrl+shift+r替换baseflutter 为你的项目名
+
 ## 页面结构    
 *lib*目录下分为：     
   --base -- 基类  
