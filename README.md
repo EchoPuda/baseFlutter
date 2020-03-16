@@ -46,21 +46,21 @@ Setting - File and Code Templates - Dart File 中设置：
 import 'package:${PROJECT_NAME}/base/common/commonInsert.dart';
 
 /// 
-/// @author jm
+/// @author [yourName]
 class ${NAME} {
 
 }
 ```
 可导入基础的包以及建立默认class，有需要可自己设置
 
-例，添加一个快速创建页面的dart：
+例，添加一个快速创建页面的选项：
 ![new dart page](https://github.com/EchoPuda/baseFlutter/blob/master/picture/example_1.jpg)
 
 ```dart
 import 'package:${PROJECT_NAME}/base/common/commonInsert.dart';
 
 /// 
-/// @author jm
+/// @author [yourName]
 class ${NAME} extends BaseWidget {
 
   @override
