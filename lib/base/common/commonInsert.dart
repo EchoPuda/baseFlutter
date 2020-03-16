@@ -23,3 +23,9 @@ export 'package:flutter_easyrefresh/easy_refresh.dart';
 export 'package:baseflutter/base/BaseWidget.dart';
 
 export 'package:baseflutter/base/BaseInnerWidget.dart';
+
+export 'package:baseflutter/utils/LanguageUtil.dart';
+
+export 'package:baseflutter/utils/LocalImageSelecter.dart';
+
+export 'package:baseflutter/network/RequestUtil.dart';
