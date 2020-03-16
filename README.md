@@ -38,7 +38,20 @@ base flutter to design
   ------xxxhdpi    
   ----ios    
   --language.json    
-    
+  
+## 配置dart的页面信息
+Setting - File and Code Templates - Dart File 中设置：
+
+```dart
+import 'package:${PROJECT_NAME}/base/common/commonInsert.dart';
+
+/// 
+/// @author jm
+class ${NAME} {
+
+}
+```
+可导入基础的包以及建立默认class，有需要可自己设置
 
 ## 1.在main中进行各资源第三方的初始化   
 例：
