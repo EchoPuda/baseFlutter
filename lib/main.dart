@@ -4,6 +4,7 @@ import 'package:baseflutter/ui/Lead.dart';
 import 'package:baseflutter/ui/home/TestChange.dart';
 import 'package:baseflutter/utils/LanguageUtil.dart';
 import 'package:baseflutter/utils/LocalImageSelecter.dart';
+import 'package:baseflutter/utils/ScreanAdapter.dart';
 import 'package:baseflutter/utils/bus/TestEventBus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,11 +66,11 @@ class MainState extends State<Main>  {
     final size = MediaQuery.of(context).size;
     final double width = size.width;
     final double height = size.height;
-    Commons.screenWidth = width;
-    Commons.screenHeight = height;
+    ScreenAdapter.screenWidth = width;
+    ScreenAdapter.screenHeight = height;
     //TODO 设计图的宽高
-    Commons.designWidth = 300;
-    Commons.designHeight = 800;
+    ScreenAdapter.designWidth = 300;
+    ScreenAdapter.designHeight = 800;
     return HomePage();
   }
 }
