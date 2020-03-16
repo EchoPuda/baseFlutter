@@ -291,6 +291,11 @@ LocalStorage.get();
 ## 12.距离转换（适配）, 谨慎使用！   
 *ScreenAdapter*
 根据设计图与实际屏幕的宽度（高度）计算得到相应比例的距离，  
+在main中对**设计图**的宽高设置，两个值由UI的设计图来定。
+```dart
+  ScreenAdapter.designWidth = 300;
+  ScreenAdapter.designHeight = 800;
+```
 但必须**谨慎使用**
 
 **禁止**直接用该工具直接做适配，一个页面的适配不是靠一个工具就能实现
