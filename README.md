@@ -16,6 +16,8 @@ base flutter to design
 【3】*pubspec.yaml*的dependencies（有需要可自己调整版本）  
 【4】android与iOS的相关权限等配置需自己添加  
 
+移植并Packages get后，相应界面的import会报红，用ctrl+shift+r替换baseflutter 为你的项目名
+
 ## 页面结构    
 *lib*目录下分为：     
   --base -- 基类  
@@ -46,7 +48,7 @@ void realRunApp() async {
   //将LocalStorage 异步转为同步
   bool success = await LocalStorage.getInstance();
   assert(success);
-  //加载语音库
+  //加载语言库
   await LanguageUtil.loadLanguage();
   runApp(MyApp());
 }
@@ -159,7 +161,7 @@ setIndex需设置为第X个页面
 ## 7.model   
 model的构建需用一个插件：**FlutterJsonBeanFactory**
 
-在model下直接通过该插件通过请求所得的json new一个model即可。    
+通过请求所得的json，在model下，根据json直接通过该插件 new一个model即可。    
 创建的model在对应的请求接口上声明 *PublishSubject<**XXXModelEntity**>*  
 即在listener中直接使用。  
 
@@ -258,9 +260,9 @@ LocalStorage.get();
 ```
 
 即，就单位来说，系统已经是有自己的适配，不需要我们画蛇添足给他们换算。  
-仅有页面设计的布局拥挤且不可滚动，需要计算每一个控件的分步区域的少数特殊情况下，才需要用这个来计算。
+仅有页面设计的布局拥挤且不可滚动，需要计算每一个控件的分布区域的少数特殊情况下，才需要用这个来计算。
 
-# 13.EventBus 事件处理   
+## 13.EventBus 事件处理   
 很有用的工具。  
 当一个页面上的处理需要通知到另一个可见或不可见的页面进行处理时，就可利用这个工具进行通知。
 例：同一级导航中，当我在 商场 消费了金币，需要同时保证 钱包 中的显示金额同步变化，但仅是切换导航（或者说返回页面）并不能调用接口更新，  
