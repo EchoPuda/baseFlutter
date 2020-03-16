@@ -53,6 +53,45 @@ class ${NAME} {
 ```
 可导入基础的包以及建立默认class，有需要可自己设置
 
+例，添加一个快速创建页面的dart：
+![new dart page](https://github.com/EchoPuda/baseFlutter/blob/master/picture/example_1.jpg)
+
+```dart
+import 'package:${PROJECT_NAME}/base/common/commonInsert.dart';
+
+/// 
+/// @author jm
+class ${NAME} extends BaseWidget {
+
+  @override
+  BaseWidgetState<BaseWidget> getState() => new ${NAME}State();
+
+}
+
+class ${NAME}State extends BaseWidgetState<${NAME}> {
+  @override
+  Widget buildWidget(BuildContext context) {
+    return Container();
+  }
+
+  @override
+  void onCreate() {
+    // TODO: implement onCreate
+  }
+
+  @override
+  void onPause() {
+    // TODO: implement onPause
+  }
+
+  @override
+  void onResume() {
+    // TODO: implement onResume
+  }
+
+}
+```
+
 ## 1.在main中进行各资源第三方的初始化   
 例：
 ```dart
