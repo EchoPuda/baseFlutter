@@ -16,7 +16,7 @@ abstract class BaseFunction {
 
   bool _isTopBarShow = true; //状态栏是否显示
   bool _isAppBarShow = true; //导航栏是否显示
-  bool _isAppBarBottomShow = true; //导航栏底部是否显示
+  bool _isAppBarBottomShow = false; //导航栏底部是否显示
 
   bool _isErrorWidgetShow = false; //错误信息是否显示
 
