@@ -49,8 +49,8 @@ class LocalImageSelector {
         Key key,
         Color imageColor,
   }) {
-    String fix = (platform == 1 ? type : postfix.split(".")[0] + type) ?? postfix;
-    String path = basePath + imageName + fix;
+//    String fix = (platform == 1 ? type : postfix.split(".")[0] + type) ?? postfix;
+    String path = basePath + imageName + postfix;
     return Image.asset(path,
         key: key,
         width: imageWidth,

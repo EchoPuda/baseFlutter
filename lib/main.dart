@@ -8,7 +8,6 @@ import 'package:baseflutter/utils/ScreanAdapter.dart';
 import 'package:baseflutter/utils/bus/TestEventBus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:baseflutter/base/common/commonInsert.dart';
 
@@ -58,7 +57,6 @@ class MainState extends State<Main>  {
   void initState() {
     super.initState();
     LocalImageSelector.init();
-//    Commons.language = LocalStorage.get("language") ?? "eg";
   }
 
   @override
