@@ -55,15 +55,15 @@ class BaseCommon {
   }
 
   /// 网络图片
-  static Widget netImage(String headImg, double width, double height,) {
+  static Widget netImage(String headImg, {double width, double height, Widget normalImage}) {
     // TODO error, loading 需修改
-    return headImg.length > 7 && headImg.substring(0,7) == "http://" ? CachedNetworkImage(
+    return headImg.isNotEmpty ? CachedNetworkImage(
       placeholder: (context, url) => SizedBox(width: width * 0.5,height: width * 0.5,child: LoadingIndicator(indicatorType: Indicator.ballSpinFadeLoader,color: Colors.grey,),),
-      errorWidget: (context, url, error) => Icon(Icons.error_outline),
+      errorWidget: (context, url, error) => Icon(Icons.error_outline,size: width),
       imageUrl: headImg,
       width: width,
       height: height,
-    ) : LocalImageSelector.getImage("touxiang_60",imageWidth: width);
+    ) : (normalImage ?? Icon(Icons.face, size: width,));
   }
 
   ///加载缓存
