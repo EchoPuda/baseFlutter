@@ -369,3 +369,16 @@ class RefreshEvent {
 ```
 
 fire可以指定事件给予不同的数据，在相同bus的监听上都会受到信息。
+
+## 14.引导页*
+引导页具体设置在**LaunchPage.dart**中      
+根据版本号判断是否应该显示引导页，但版本号的获取不应在引导页中进行，应该在app加载前获取。
+```dart
+/// 在进入app前的初始化
+void realRunApp() async {
+  // 加载版本号
+  await VersionInfo.getInstance();
+  runApp(MyApp());
+}
+```
+通过接口等方法同理。
