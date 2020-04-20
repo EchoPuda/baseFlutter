@@ -51,7 +51,7 @@ class HttpManager {
         BaseIntercept baseIntercept,
         bool isCancelable = true,
         bool isSHowErrorToast = true}) {
-    return _requstHttp<T>(url, false, FormData.fromMap(queryParameters),
+    return _requstHttp<T>(url, false, queryParameters,
         baseIntercept, isCancelable,isSHowErrorToast);
   }
 

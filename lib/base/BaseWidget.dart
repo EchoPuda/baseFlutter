@@ -115,7 +115,7 @@ abstract class BaseWidgetState<T extends BaseWidget> extends State<T>
         onResume();
       }
     } else if (state == AppLifecycleState.paused) {
-      //onpause
+      //on pause
       if (NavigatorManger().isTopPage(this)) {
         onBackground();
         onPause();

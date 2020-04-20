@@ -19,22 +19,22 @@ class BaseCommon {
   }
 
   ///打开新页面
-  static openPage(BuildContext context, Widget widget) {
+  static Future openPage(BuildContext context, Widget widget) {
     return Navigator.push(context, new MaterialPageRoute(builder: (context) => widget));
   }
 
   ///打开新页面(用页名)
-  static openPageWithName(BuildContext context, String widget) {
+  static Future openPageWithName(BuildContext context, String widget) {
     return Navigator.pushNamed(context, widget);
   }
 
   ///打开新页面代替旧页面
-  static openPageReplacement(BuildContext context, Widget widget) {
+  static Future openPageReplacement(BuildContext context, Widget widget) {
     return Navigator.pushReplacement(context, new MaterialPageRoute(builder: (context) => widget));
   }
 
   ///打开新页面代替旧页面(用页名)
-  static openPageReplacementWithName(BuildContext context, widget) {
+  static Future openPageReplacementWithName(BuildContext context, widget) {
     return Navigator.pushReplacementNamed(context, widget);
   }
 
