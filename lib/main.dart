@@ -6,6 +6,7 @@ import 'package:baseflutter/ui/TestPage.dart';
 import 'package:baseflutter/ui/home/TestChange.dart';
 import 'package:baseflutter/utils/LanguageUtil.dart';
 import 'package:baseflutter/utils/LocalImageSelecter.dart';
+import 'package:baseflutter/utils/PermissionManager.dart';
 import 'package:baseflutter/utils/ScreanAdapter.dart';
 import 'package:baseflutter/utils/VersionInfo.dart';
 import 'package:baseflutter/utils/bus/TestEventBus.dart';
@@ -26,6 +27,8 @@ void realRunApp() async {
   await VersionInfo.getInstance();
   // 加载语言
   await LanguageUtil.loadLanguage();
+  // 请求权限
+  await PermissionManager.request();
   runApp(MyApp());
 }
 

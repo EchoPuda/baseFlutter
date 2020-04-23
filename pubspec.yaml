@@ -51,6 +51,9 @@ dependencies:
   # 轮播图
   flutter_swiper: ^1.1.6
 
+  # 权限
+  permission_handler: ^5.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
