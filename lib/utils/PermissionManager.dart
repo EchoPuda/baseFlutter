@@ -22,6 +22,7 @@ class PermissionManager {
 //    }
     if (listPermission.isNotEmpty) {
       Map<Permission, PermissionStatus> statuses = await listPermission.request();
+      /// 请求结果
       print(statuses);
     }
 

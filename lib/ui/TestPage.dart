@@ -37,12 +37,14 @@ class TestPageState extends BaseWidgetState<TestPage> {
     await _changeLanguage();
   }
 
+  /// 请求测试
   Future _requestTest() async {
-    setLoadingWidgetVisible(true);
-    RequestUtil.testRequest(ShowLoadingIntercept(this), "data").listen((event) {
-
-    }).onError((e) {
-      log(e.messgae);
+    await RequestUtil.testRequest(ShowLoadingIntercept(this), 94).then((event) {
+      // 成功处理
+      print(event.data);
+    }, onError: (e) {
+      // 错误处理
+      log(e.message.toString());
     });
   }
 
@@ -196,7 +198,7 @@ class TestPageState extends BaseWidgetState<TestPage> {
 
   @override
   void onResume() {
-
+    _requestTest();
   }
 
 }

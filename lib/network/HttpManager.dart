@@ -5,6 +5,10 @@ import 'dart:io';
 import 'package:baseflutter/base/buildConfig.dart';
 import 'package:baseflutter/base/common/common.dart';
 import 'package:baseflutter/generated/json/base/json_convert_content.dart';
+import 'package:baseflutter/network/response/ApiFullTransform.dart';
+import 'package:baseflutter/network/response/ApiStringTransform.dart';
+import 'package:baseflutter/network/response/Transform.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';
 import 'package:http_parser/http_parser.dart';
@@ -23,66 +27,83 @@ class HttpManager {
   static Dio _dio;
   static final int CONNECR_TIME_OUT = 5000;
   static final int RECIVE_TIME_OUT = 3000;
+
   static Map<String, CancelToken> _cancelTokens =
       new Map<String, CancelToken>();
 
   HttpManager._internal() {
     initDio();
   }
+
   static HttpManager _httpManger = HttpManager._internal();
+
   factory HttpManager() {
     return _httpManger;
   }
 
-  //get请求
-  PublishSubject<T> get<T>(
-      String url, {
+  ///get请求
+  Future<T> get<T>(
+      String url, {ResponseTransform<T> transform,
         Map<String, dynamic> queryParameters,
         BaseIntercept baseIntercept,
         bool isCancelable = true,
       }) {
     return _requstHttp<T>(
-        url, true, queryParameters, baseIntercept, isCancelable,false);
+        url, transform, true, queryParameters, baseIntercept, isCancelable,false);
   }
 
-  //post请求
-  PublishSubject<T> post<T>(String url,
-      {Map<String, dynamic> queryParameters,
+  ///post请求
+  Future<T> post<T>(String url,
+      {ResponseTransform<T> transform,
+      Map<String, dynamic> queryParameters,
         BaseIntercept baseIntercept,
         bool isCancelable = true,
         bool isSHowErrorToast = true}) {
-    return _requstHttp<T>(url, false, queryParameters,
-        baseIntercept, isCancelable,isSHowErrorToast);
+    return _requstHttp<T>(url,transform, false, queryParameters,
+        baseIntercept, isCancelable, isSHowErrorToast);
   }
 
-  //上传（post）请求
-  PublishSubject<T> upload<T>(String url, String path,
-      {String type : "image",
+  ///上传（post）请求
+  Future<T> upload<T>(String url, String path,
+      {ResponseTransform<T> transform,
+      String type : "image",
         Map<String, dynamic> queryParameters,
         BaseIntercept baseIntercept,
         bool isCancelable = true,
         bool isSHowErrorToast = true}) {
-    return _requestUpload<T>(url, path,type,
+    return _requestUpload<T>(url, path,transform,type,
         false, queryParameters,
         baseIntercept, isCancelable);
   }
 
-  /// 参数说明  url 请求路径
-  /// queryParamerers  是 请求参数
-  /// baseWidget和baseInnerWidgetState用于 加载loading 和 设置 取消CancelToken
-  /// isCancelable 是设置改请求是否 能被取消 ， 必须建立在 传入baseWidget或者baseInnerWidgetState的基础之上
-  /// isShowLoading 设置是否能显示 加载loading , 同样要建立在传入 baseWidget或者 baseInnerWidgetState 基础之上
-  /// isShowErrorToaet  这个是 设置请求失败后 是否要 吐司的
-  PublishSubject<T> _requstHttp<T>(String url,
+  /// [url] 请求路径
+  /// [queryParameters]  请求参数
+  /// [transform] 请求结果处理的转换器, 可以控制自定义返回的内容
+  /// [baseIntercept] 配合基类 控制 加载loading 和 设置 取消CancelToken
+  /// [isCancelable] 是设置改请求是否 能被取消 ， 必须建立在 传入baseWidget或者baseInnerWidgetState的基础之上
+  /// [isShowLoading] 设置是否能显示 加载loading , 同样要建立在传入 baseWidget或者 baseInnerWidgetState 基础之上
+  /// [isShowErrorToast]  这个是 设置请求失败后 是否要 吐司的
+  Future<T> _requstHttp<T>(String url, ResponseTransform<T> transform,
       [bool isGet,
         queryParameters,
         BaseIntercept baseIntercept,
         bool isCancelable,
-        bool isShowErrorToast
+        bool isShowErrorToast,
       ]) {
     Future future;
-    PublishSubject<T> publishSubject = PublishSubject<T>();
+
+    if (transform == null) {
+      transform = ApiFullTransform();
+    }
+//    PublishSubject<T> publishSubject = PublishSubject<T>();
+
+    Completer<T> completer = new Completer();
+
+    transform.setBaseIntercept(baseIntercept);
+    transform.setPublishPubject(completer);
+
     CancelToken cancelToken;
+
     _setInterceptOrcancelAble(baseIntercept, isCancelable, cancelToken);
 
     try {
@@ -93,13 +114,6 @@ class HttpManager {
         future = _dio.post(url, data: queryParameters, cancelToken: cancelToken);
       }
     } on DioError catch (e) {
-      String errorMessage = "";
-      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
-        errorMessage = "与服务器连接超时";
-      } else {
-        errorMessage = "与服务器连接发生错误";
-      }
-
       if (Commons.DEBUG) {
         print('请求异常: ' + e.toString());
         print('请求异常url: ' + url);
@@ -107,72 +121,54 @@ class HttpManager {
           print('请求异常参数: ' + queryParameters.toString());
         }
       }
-      callError(
-        publishSubject,
-        MyError(500, errorMessage),
-        baseIntercept,
-        isShowErrorToast: isShowErrorToast,
-      );
+      _doError(e, transform);
     }
 
-
     future.then((data) {
-
       if (Commons.DEBUG) {
         print('请求url: ' + url);
-        print('请求token: ' + cancelToken.toString());
+        print('请求token: ' + (LocalStorage.get(Commons.TOKEN) ?? ""));
         if (queryParameters != null) {
           print('请求参数: ' + queryParameters.toString());
         }
         if (future != null) {
-          print('返回参数: ' + future.toString());
+          print('返回参数: ' + data.toString());
         }
       }
 
-      //这里要做错误处理, 与后台约定好code，message等参数
-      int code = json.decode(data.toString())["code"];
+      transform.apply(data.toString(), isShowErrorToast: isShowErrorToast);
 
-//      print("---responseData----${data}-----");
-      if (code != 200) {
-        String message = json.decode(data.toString())["message"];
-        print("错误信息：" + message);
-        callError(
-          publishSubject,
-          MyError(code, message),
-          baseIntercept,
-          isShowErrorToast: isShowErrorToast,
-        );
-      } else {
-        //这里的解析 请参照 https://www.jianshu.com/p/e909f3f936d6 , dart的字符串 解析蛋碎一地
-        publishSubject
-            .add(JsonConvert.fromJsonAsT<T>(json.decode(data.toString())));
-        publishSubject.close();
-
-        cancelLoading(baseIntercept);
-      }
     }).catchError((err) {
-      callError(
-        publishSubject,
-        MyError(1, err.toString()),
-        baseIntercept,
-        isShowErrorToast: isShowErrorToast,);
+      _doError(err, transform);
     });
 
-    return publishSubject;
+    return completer.future;
   }
 
   ///上传请求
-  PublishSubject<T> _requestUpload<T>(
+  Future<T> _requestUpload<T>(
       String url,
       String path,
+      ResponseTransform<T> transform,
       [String type,
         bool isGet,
         queryParameters,
         BaseIntercept baseIntercept,
         bool isCancelable]) {
     Future future;
-    PublishSubject<T> publishSubject = PublishSubject<T>();
+
+    if (transform == null) {
+      transform = ApiFullTransform();
+    }
+//    PublishSubject<T> publishSubject = PublishSubject<T>();
+
+    Completer<T> completer = new Completer();
+
+    transform.setBaseIntercept(baseIntercept);
+    transform.setPublishPubject(completer);
+
     CancelToken cancelToken;
+
     _setInterceptOrcancelAble(baseIntercept, isCancelable, cancelToken);
 
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
@@ -194,13 +190,6 @@ class HttpManager {
         future = _dio.post(url, data: formData, cancelToken: cancelToken);
       }
     } on DioError catch (e) {
-      String errorMessage = "";
-      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
-        errorMessage = "与服务器连接超时";
-      } else {
-        errorMessage = "与服务器连接发生错误";
-      }
-
       if (Commons.DEBUG) {
         print('请求异常: ' + e.toString());
         print('请求异常url: ' + url);
@@ -208,56 +197,54 @@ class HttpManager {
           print('请求异常参数: ' + queryParameters.toString());
         }
       }
-      callError(
-        publishSubject,
-        MyError(500, errorMessage),
-        baseIntercept,
-      );
+      _doError(e, transform);
     }
 
-    future.then((data){
-
+    future.then((data) {
       if (Commons.DEBUG) {
         print('请求url: ' + url);
-        print('请求token: ' + cancelToken.toString());
+        print('请求token: ' + (LocalStorage.get(Commons.TOKEN) ?? ""));
         if (queryParameters != null) {
           print('请求参数: ' + queryParameters.toString());
         }
         if (future != null) {
-          print('返回参数: ' + future.toString());
+          print('返回参数: ' + data.toString());
         }
       }
 
-      bool isError = json.decode(data.toString())["error"];
-      if (isError) {
-        callError(
-          publishSubject,
-          MyError(10, "请求失败~"),
-          baseIntercept,
-        );
-      } else {
-        publishSubject
-            .add(JsonConvert.fromJsonAsT<T>(json.decode(data.toString())));
-        publishSubject.close();
+      transform.apply(data.toString());
 
-        cancelLoading(baseIntercept);
-      }
+    }).catchError((err) {
+      _doError(err, transform);
     });
 
-    return publishSubject;
+    return completer.future;
+
   }
 
   ///上传请求,多个文件上传
-  PublishSubject<T> _requestUploads<T>(
+  Future<T> _requestUploads<T>(
       String url,
       List<String> paths,
+      ResponseTransform<T> transform,
       [bool isGet,
         queryParameters,
         BaseIntercept baseIntercept,
         bool isCancelable]) {
     Future future;
-    PublishSubject<T> publishSubject = PublishSubject<T>();
+
+    if (transform == null) {
+      transform = ApiFullTransform();
+    }
+//    PublishSubject<T> publishSubject = PublishSubject<T>();
+
+    Completer<T> completer = new Completer();
+
+    transform.setBaseIntercept(baseIntercept);
+    transform.setPublishPubject(completer);
+
     CancelToken cancelToken;
+
     _setInterceptOrcancelAble(baseIntercept, isCancelable, cancelToken);
 
     List<MultipartFile> listPath = new List();
@@ -285,13 +272,6 @@ class HttpManager {
         future = _dio.post(url, data: formData, cancelToken: cancelToken);
       }
     } on DioError catch (e) {
-      String errorMessage = "";
-      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
-        errorMessage = "与服务器连接超时";
-      } else {
-        errorMessage = "与服务器连接发生错误";
-      }
-
       if (Commons.DEBUG) {
         print('请求异常: ' + e.toString());
         print('请求异常url: ' + url);
@@ -299,59 +279,28 @@ class HttpManager {
           print('请求异常参数: ' + queryParameters.toString());
         }
       }
-      callError(
-        publishSubject,
-        MyError(500, errorMessage),
-        baseIntercept,
-      );
+      _doError(e, transform);
     }
 
-    future.then((data){
-
+    future.then((data) {
       if (Commons.DEBUG) {
         print('请求url: ' + url);
-        print('请求token: ' + cancelToken.toString());
+        print('请求token: ' + (LocalStorage.get(Commons.TOKEN) ?? ""));
         if (queryParameters != null) {
           print('请求参数: ' + queryParameters.toString());
         }
-        if (future != null) {
-          print('返回参数: ' + future.toString());
+        if (data != null) {
+          print('返回参数: ' + data.toString());
         }
       }
 
-      bool isError = json.decode(data.toString())["error"];
-      if (isError) {
-        callError(
-          publishSubject,
-          MyError(10, "请求失败~"),
-          baseIntercept,
-        );
-      } else {
-        publishSubject
-            .add(JsonConvert.fromJsonAsT<T>(json.decode(data.toString())));
-        publishSubject.close();
+      transform.apply(data.toString());
 
-        cancelLoading(baseIntercept);
-      }
+    }).catchError((err) {
+      _doError(err, transform);
     });
 
-    return publishSubject;
-  }
-
-  ///请求错误以后 做的一些事情
-  void callError(PublishSubject publishSubject, MyError error,
-      BaseIntercept baseIntercept,{bool isShowErrorToast : true}) {
-    publishSubject.addError(error);
-
-    if (isShowErrorToast) {
-      showErrorToast(error.message);
-    }
-
-    publishSubject.close();
-    cancelLoading(baseIntercept);
-    if (baseIntercept != null) {
-      baseIntercept.requestFailure(error.message);
-    }
+    return completer.future;
   }
 
   ///取消请求
@@ -368,9 +317,8 @@ class HttpManager {
   void initDio() {
     _dio = Dio();
     // 配置dio实例
-//    _dio.options.baseUrl = "http://10.150.20.86/xloan-app-api/";
-    _dio.options.baseUrl = "http://gank.io/api/";
-    _dio.options.connectTimeout = CONNECR_TIME_OUT; //5s
+    _dio.options.baseUrl = "";
+    _dio.options.connectTimeout = CONNECR_TIME_OUT;
     _dio.options.receiveTimeout = RECIVE_TIME_OUT;
 
 //代理设置
@@ -391,16 +339,15 @@ class HttpManager {
 //      };
     }
 
-    //证书配置
-//    String PEM="XXXXX"; // certificate content
-//    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate  = (client) {
-//      client.badCertificateCallback=(X509Certificate cert, String host, int port){
-//        if(cert.pem==PEM){ // Verify the certificate
-//          return true;
-//        }
-//        return false;
-//      };
-//    };
+    //证书配置 ， 忽略证书
+    String PEM = "XXXXX"; // certificate content
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) {
+        return true; //返回 true 表明 忽略 证书校验
+      };
+    };
 
     /// 添加自己的拦截器
     _dio.interceptors.add(new MyIntercept());
@@ -437,6 +384,33 @@ class HttpManager {
       baseIntercept.afterRequest();
     }
   }
+
+  ///过滤网络出错的情况
+  ///根据情况可以自定
+  void _doError(err, ResponseTransform transform) {
+    try {
+      if (err is DioError) {
+        if (err.type == DioErrorType.CANCEL) {
+          print("---请求取消---");
+        } else if (err.type == DioErrorType.CONNECT_TIMEOUT ||
+            err.type == DioErrorType.RECEIVE_TIMEOUT) {
+          transform.callError(MyError(400, "连接超时"));
+        } else if (err.response != null) {
+          transform
+              .callError(MyError(err.response.statusCode, "${err.message}"));
+        } else {
+          transform.callError(MyError(400, "${err.message}"));
+        }
+      } else if (err is SocketException) {
+        transform.callError(MyError(400, "网路异常"));
+      } else {
+        transform.callError(MyError(1, err.toString()));
+      }
+    } catch (err2) {
+      transform.callError(MyError(400, "网络异常，请稍后重试"));
+    }
+  }
+
 }
 
 class MyError {

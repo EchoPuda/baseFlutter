@@ -1,3 +1,4 @@
+import 'package:baseflutter/base/common/commonInsert.dart';
 import 'package:dio/dio.dart';
 
 /// 拦截器，可自定义
@@ -26,12 +27,7 @@ class MyIntercept extends Interceptor {
 
     //根据实际项目修改
     options.headers.addAll({
-      "xloanDeviceID": "deviceID",
-      "xloanPlatform": "ANDROID",
-      "xloanServer": "1.0",
-      "xloanDeviceVersion": model,
-      "xloanVersion": versionName,
-      "x-auth-token": userToken,
+      "Access-Token": "5a9bb9dcec5aff85f9ba6afb01f0db2217180cadeb7",
     });
 
     return super.onRequest(options);

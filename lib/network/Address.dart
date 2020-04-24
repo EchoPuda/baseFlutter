@@ -6,5 +6,5 @@ class Address {
   static const String BASE_HTTP = "http://base/";
 
   ///------------------test--------------------------
-  static const String TEST = BASE_HTTP + "test" + ".json";
+  static const String TEST = "https://api.heybooks.net/api/article/getOne";
 }
