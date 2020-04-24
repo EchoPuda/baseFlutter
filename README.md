@@ -126,15 +126,16 @@ void realRunApp() async {
   loading，error等可以修改为项目所需的样式。与封装的网络请求结合使用。  
   网络请求例子：  
   ```dart
-    RequestUtil.testRequest(ShowLoadingIntercept(this), "data").listen((event) { 
-      //请求成功
-    }).onError((e) {
-      //请求失败
-      log(e.messgae);
+    await RequestUtil.testRequest(ShowLoadingIntercept(this), 100).then((event) {
+      // 成功处理
+      print(event.data);
+    }, onError: (e) {
+      // 错误处理
+      log(e.message.toString());
     });
   ```
   需传入ShowLoadingIntercept拦截器（可自定义）才能有loading等，
-    在StatefulWidget的组件中可通过传入BaseFunction参数来使用，不需要loading可传null
+    在StatefulWidget的组件中可通过传入BaseFunction参数来使用，不需要loading可传NoActionIntercept
   ```dart
   ShowLoadingIntercept(widget.baseFunction)
   ```
