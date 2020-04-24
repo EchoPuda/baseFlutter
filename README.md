@@ -384,3 +384,27 @@ void realRunApp() async {
 }
 ```
 通过接口等方法同理。
+
+## 15.权限管理*
+*PermissionManager.dart*:     
+检查并添加权限：
+```dart
+    /// 检查权限
+    if (await Permission.storage.isUndetermined){
+      /// 添加权限
+      listPermission.add(Permission.storage);
+    }
+```
+
+在runApp中请求权限：     
+```dart
+  // 请求权限
+  await PermissionManager.request();
+```
+
+若想做请求之后结果的判断：
+```dart
+      Map<Permission, PermissionStatus> statuses = await listPermission.request();
+      /// 处理请求结果
+      print(statuses);
+```
