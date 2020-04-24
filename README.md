@@ -203,7 +203,9 @@ setIndex需设置为第X个页面
 ## 5.常量   
 **Commons**常量需要专门管理
 
-## 6.网络封装  
+## 6.网络封装*  
+*网络请求更改为future的方式，更好的处理控制。*   
+
 网络的相关配置在**HttpManager**中进行配置  
 如何使用参考 *Address* 和 *RequestUtil* 中的写法。  
 
