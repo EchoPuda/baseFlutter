@@ -54,7 +54,7 @@ class MyPopMenu {
   ///建议在main中初始化设置
   static var arrowHeight = 7.0; //箭头高度
   static var itemHeight = 50.0; //item高度
-  static var itemWidth = LocalStorage.get("windowWidth") * 0.5 - 10;  //宽度
+  static var itemWidth = 142.0;  //宽度
   static var dividerPer = 0.7;  //分割线比例
 
   void show({Rect rect, GlobalKey widgetKey}) {
@@ -79,7 +79,7 @@ class MyPopMenu {
   }
 
   double menuWidth() {
-    return LocalStorage.get("windowWidth") * 0.5 - 10;
+    return itemWidth;
   }
 
   static Rect getWidgetGlobalRect(GlobalKey key) {
