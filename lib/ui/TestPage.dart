@@ -17,6 +17,60 @@ class TestPage extends BaseWidget {
 
 class TestPageState extends BaseWidgetState<TestPage> {
 
+  ///
+  /// () {} 与 () => (){}
+  /// 后者可相当于前者的简写，即
+  /// onTap: () {
+  ///   onMyTap();
+  /// },
+  /// 与
+  /// onTap: () => onMyTap(),  //注意括号
+  /// 是一样的。
+  ///
+  /// 当然假如onMyTap的类型和参数跟onTap的一致，那更可以简写为
+  /// onTap: onMyTap,  //注意没括号
+  /// 不过() => (){}只有在仅有一行语句的时候简写
+  /// 比如 onTap: () {
+  ///    onMyTap();
+  ///    onOtherTap();
+  /// },
+  /// 无法简写。
+  ///
+  ///
+  /// UI编译时，有括号和没括号的区别：
+  /// 无括号 :
+  ///   如 onTap: onMyTap,  //注意没有括号
+  ///   void onMyTap(var m) {}
+  ///   也可以 onTap：(m) => onMyTap(m)  注意后面的要有括号及传值，
+  ///   前面括号内容视提供onTap的该方法是否有回调参数而定
+  ///
+  /// 有括号 :
+  ///   即是需要返回规定的对象
+  ///   () {
+  ///     return m; // 注意这个return，必须要返回规定的对象
+  ///   }
+  ///
+  ///   如：
+  ///     ···
+  ///       Container(
+  ///         child: MyWidget(),  //注意有括号
+  ///       ),
+  ///     ···
+  ///     Widget MyWidget(
+  ///       return Container();  //返回规定的widget
+  ///     )
+  ///
+  /// 所以可以简单做个区别，
+  /// 当构建UI时，
+  ///   如果没有括号，即是回调并调用你提供的方法； onTap: onTap,
+  ///   如果有括号，即是需要你提供规定的对象； child: Container(),
+  ///
+  /// 所以点击事件 onTap: onTap(), 是错误的写法，
+  /// *但不会报错，因为语法没问题，但主次不对。点击事件不会响应。或者一直响应
+  /// child: Container, 会直接报错，因为没有提供需要的对象
+  ///
+  ///
+
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   /// 改語言
@@ -98,7 +152,7 @@ class TestPageState extends BaseWidgetState<TestPage> {
             Positioned(
               bottom: 40,
               child: FlatButton(
-                onPressed: _onPressed,
+                onPressed: () => _onPressed(),
                 child: Container(
                     width: 70,
                     height: 70,
