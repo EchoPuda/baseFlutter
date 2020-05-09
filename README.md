@@ -213,13 +213,15 @@ setIndex需设置为第X个页面
 基础拦截器如 *BaseIntercept* ,可在其中进行拦截处理，比如请求前添加**token**
 可增加额外的拦截器比如*ShowLoadingIntercept*, 并**继承** *BaseIntercept*
 
-若不需要loading拦截器，可传一个基础的拦截器，如*NoActionIntercept*，不建议传null，因为涉及到统一错误管理需要基类。
+若不需要loading拦截器，可传一个基础的拦截器，如*NoActionIntercept*，不建议传null，因为涉及到统一错误管理需要基类。  
+
+在transform中进行处理，可自定义，可不同接口不同处理。
 
 ## 7.model   
 model的构建需用一个插件：**FlutterJsonBeanFactory**
 
 通过请求所得的json，在model下，根据json直接通过该插件 new一个model即可。    
-创建的model在对应的请求接口上声明 *PublishSubject<**XXXModelEntity**>*  
+创建的model在对应的请求接口上声明 *Future<**XXXModelEntity**>*  
 即在listener中直接使用。  
 
 ## 8.res   
